@@ -194,3 +194,46 @@ WHERE activity_count IS NULL
 SELECT *
 FROM fct_student_daily_engagement
 WHERE engagement_score < 0;
+
+
+-- ====================================
+-- 7. Top Improving Students
+-- ====================================
+
+WITH ranked_days AS (
+  SELECT
+    student_id,
+    activity_date,
+    engagement_score,
+    NTILE(2) OVER (
+      PARTITION BY student_id
+      ORDER BY activity_date
+    ) AS time_bucket
+  FROM fct_student_daily_engagement
+),
+
+bucketed AS (
+  SELECT
+    student_id,
+    time_bucket,
+    AVG(engagement_score) AS avg_score
+  FROM ranked_days
+  GROUP BY student_id, time_bucket
+),
+
+pivoted AS (
+  SELECT
+    student_id,
+    MAX(CASE WHEN time_bucket = 1 THEN avg_score END) AS early_avg,
+    MAX(CASE WHEN time_bucket = 2 THEN avg_score END) AS late_avg
+  FROM bucketed
+  GROUP BY student_id
+)
+
+SELECT
+  student_id,
+  early_avg,
+  late_avg,
+  (late_avg - early_avg) AS improvement_score
+FROM pivoted
+ORDER BY improvement_score DESC;
