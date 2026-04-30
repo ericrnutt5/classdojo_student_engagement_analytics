@@ -1,5 +1,31 @@
 # Student Engagement Analytics Layer
 
+## Overview
+
+This project builds a simplified analytics engineering layer to model student engagement behavior across activity and family interaction signals.
+
+Raw event data from multiple sources is transformed into a single structured fact table to enable consistent reporting and insight generation.
+
+The goal is to demonstrate end-to-end analytics engineering skills, including data modeling, metric design, data quality validation, and insight generation.
+
+---
+
+## Key Highlights
+
+- Designed a star-schema-style analytics model from raw event data
+- Built a daily-grain fact table: `fct_student_daily_engagement`
+- Developed a transparent engagement scoring system combining:
+  - student activity
+  - point-based participation
+  - parent engagement signals
+- Implemented data quality checks for:
+  - grain integrity
+  - referential consistency
+  - metric validity
+- Created an insight query to identify student engagement improvement over time
+
+---
+
 ## Problem Statement
 
 Educational platforms need a reliable way to measure student engagement across both behavioral activity and family visibility. Raw event data is fragmented across multiple sources, making consistent reporting difficult.
